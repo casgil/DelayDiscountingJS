@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DelayDiscounting</title>
+    <base href="/DelayDiscountingJS/">
+    <script src="./jspsych/jspsych.js"></script>
+    <script src="./jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="./jspsych/plugin-html-button-response.js"></script>
+    <link href="./jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="./main.js"></script>
+    <style>
+      #display_stage_background {
+        width: 100vw;
+        background-color: white;
+        z-index: -1;
+      }
+
+      #display_stage {
+        position: fixed;
+        left: 1vw;
+        top: 1vh;
+        height: 98vh;
+        width: 98vw;
+        background-color: white;
+        box-shadow: 1px 1px 1px #999;
+        border-radius: 15px;
+        z-index: 0;
+        overflow-y: hidden;
+        overflow-x: hidden; 
+        }       
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+    /* initialize jsPsych */
+    var jsPsych = initJsPsych({
+        //timeline: timeline,
+      on_finish: function() {
+        jsPsych.data.displayData();
+    }
+    });
+    /*start task*/
+      jsPsych.run(timeline);
+    
+
+  </script>
+</html>
