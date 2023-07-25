@@ -56,7 +56,7 @@ var trial1 = {
     button_html: '<button class="button">%choice%</button>',
     response_ends_trial: true,
     on_finish: function(data){
-      data.index = [initialD, dMap.get(initialD)];;
+      data.index = [initialD, dMap.get(initialD)];
       console.log();
       if (data.response == 0) { //record the response for the current trial
         data.delay = true;
