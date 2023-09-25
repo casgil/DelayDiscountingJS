@@ -5,7 +5,7 @@
 */
 
 //TODO: 
-//put on github pages and qualtrics
+//get to work on qualtrics
 
 let initialD = 16; 
 //this is the initial delay which is set to 16 as per Koffarnus and Bickel's papers
