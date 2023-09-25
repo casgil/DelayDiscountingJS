@@ -44,7 +44,7 @@ const dMap = new Map([
   [31, "25 years"],
 ]);
 
-const stim = '<div style="font-size:40px;font-weight:bold;">Which would you rather get?</div>';
+const stim = '<div style="font-size:20px;font-weight:bold;">Which would you rather get?</div>';
 
 var timeline = [];
 //todo: change buttons
