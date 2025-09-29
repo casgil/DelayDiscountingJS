@@ -33,7 +33,7 @@ const dMap = new Map([
   [20, "4 months"],
   [21, "6 months"],
   [22, "8 months"],
-  [23, "1 years"],
+  [23, "1 year"],
   [24, "2 years"],
   [25, "3 years"],
   [26, "4 years"],
@@ -49,38 +49,26 @@ const stim = '<div style="font-size:20px;font-weight:bold;">Which would you rath
 var timeline = [];
 //todo: change buttons
 
-var trial1 = {
+// Step sizes for trials: first trial shows initialD without adjustment, then +/-8, +/-4, +/-2, +/-1
+var stepSizes = [0, 8, 4, 2, 1];
+
+stepSizes.forEach(function(step, idx) {
+  var trial = {
     type: jsPsychHtmlButtonResponse,
     stimulus: stim,
-    choices: ['$1000 in ' + dMap.get(initialD) +' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + ''], //starts at 16
-    button_html: '<button class="button">%choice%</button>',
-    response_ends_trial: true,
-    on_finish: function(data){
-      data.index = [initialD, dMap.get(initialD)];
-      console.log();
-      if (data.response == 0) { //record the response for the current trial
-        data.delay = true;
-        
-      }
-      else {
-        data.delay = false;
-      }
-    }
-}
-
-var trial2 = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: stim,
     choices: function() {
-      var last_trial_choice = jsPsych.data.get().last(1).values()[0].delay; //either true or false
-      if (last_trial_choice) { //if last trial was true
-        initialD = initialD + 8; 
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
+      if (idx > 0) {
+        var last_trial_choice = jsPsych.data.get().last(1).values()[0].delay;
+        if (last_trial_choice) {
+          initialD = initialD + step;
+        } else {
+          initialD = initialD - step;
+        }
+        // clamp within bounds
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
       }
-      else {
-        initialD = initialD - 8;
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
-      }
+      return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
     },
     button_html: '<button class="button">%choice%</button>',
     response_ends_trial: true,
@@ -94,97 +82,9 @@ var trial2 = {
         data.delay = false;
       }
     }
-}
-
-var trial3 = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: stim,
-    choices: function() {
-      var last_trial_choice = jsPsych.data.get().last(1).values()[0].delay;
-      if (last_trial_choice) {
-        initialD = initialD + 4; //divides by 2 each trial (8 then 4 then 2 then 1)
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
-      }
-      else {
-        initialD = initialD - 4;
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
-      }
-    },
-    button_html: '<button class="button">%choice%</button>',
-    response_ends_trial: true,
-    on_finish: function(data){
-      data.index =  [initialD, dMap.get(initialD)];
-      console.log();
-      if (data.response == 0) {
-        data.delay = true;
-      }
-      else {
-        data.delay = false;
-      }
-    }
-}
-
-var trial4 = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: stim,
-    choices: function() {
-      var last_trial_choice = jsPsych.data.get().last(1).values()[0].delay;
-      if (last_trial_choice) {
-        initialD = initialD + 2;
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
-      }
-      else {
-        initialD = initialD - 2;
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
-      }
-    },
-    button_html: '<button class="button">%choice%</button>',
-    response_ends_trial: true,
-    on_finish: function(data){
-      data.index =  [initialD, dMap.get(initialD)];
-      console.log();
-      if (data.response == 0) {
-        data.delay = true;
-      }
-      else {
-        data.delay = false;
-      }
-    }
-  }
-
-var trial5 = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: stim,
-    choices: function() {
-      var last_trial_choice = jsPsych.data.get().last(1).values()[0].delay;
-      if (last_trial_choice) {
-        initialD = initialD + 1;
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
-      }
-      else {
-        initialD = initialD - 1;
-        return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
-      }
-    },
-    button_html: '<button class="button">%choice%</button>',
-    response_ends_trial: true,
-    on_finish: function(data){
-      data.index =  [initialD, dMap.get(initialD)];
-      console.log();
-      if (data.response == 0) {
-        data.delay = true;
-      }
-      else {
-        data.delay = false;
-      }
-    }
-}
-
-timeline.push(trial1);
-timeline.push(trial2);
-timeline.push(trial3);
-timeline.push(trial4);
-timeline.push(trial5);
+  };
+  timeline.push(trial);
+});
 
 
 
