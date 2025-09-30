@@ -49,8 +49,11 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         // Save to Embedded Data
         try {
           Qualtrics.SurveyEngine.setEmbeddedData('dd_trials_json', JSON.stringify(trials));
-          Qualtrics.SurveyEngine.setEmbeddedData('dd_final_index', trials[trials.length - 1]?.index?.[0] ?? null);
-          Qualtrics.SurveyEngine.setEmbeddedData('dd_final_label', trials[trials.length - 1]?.index?.[1] ?? null);
+          var lastTrial = trials[trials.length - 1];
+          var finalIndex = lastTrial && lastTrial.index && lastTrial.index[0] ? lastTrial.index[0] : null;
+          var finalLabel = lastTrial && lastTrial.index && lastTrial.index[1] ? lastTrial.index[1] : null;
+          Qualtrics.SurveyEngine.setEmbeddedData('dd_final_index', finalIndex);
+          Qualtrics.SurveyEngine.setEmbeddedData('dd_final_label', finalLabel);
         } catch(e) {}
 
         // Advance survey
