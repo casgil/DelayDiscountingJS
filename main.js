@@ -68,7 +68,7 @@ stepSizes.forEach(function(step, idx) {
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
       }
-      return ['$1000 in ' + dMap.get(initialD) + ' and $0 now', '$500 now and $0 in '+ dMap.get(initialD) + '']
+      return ['$1000 in ' + dMap.get(initialD), '$500 now ']
     },
     button_html: '<button class="button">%choice%</button>',
     response_ends_trial: true,
