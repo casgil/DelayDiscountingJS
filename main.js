@@ -63,7 +63,7 @@ var trial1 = {
     trial1._isReversed = isReversed;
     return choices;
   },
-  button_html: '<button class="button">%choice%</button>',
+  button_html: '<button class="button jspsych-btn">%choice%</button>',
   response_ends_trial: true,
   on_finish: function(data){
     data.index = [initialD, dMap.get(initialD)];
@@ -99,7 +99,7 @@ var trial2 = {
     trial2._isReversed = isReversed;
     return choices;
   },
-  button_html: '<button class="button">%choice%</button>',
+  button_html: '<button class="button jspsych-btn">%choice%</button>',
   response_ends_trial: true,
   on_finish: function(data){
     data.index = [initialD, dMap.get(initialD)];
@@ -133,7 +133,7 @@ var trial3 = {
     trial3._isReversed = isReversed;
     return choices;
   },
-  button_html: '<button class="button">%choice%</button>',
+  button_html: '<button class="button jspsych-btn">%choice%</button>',
   response_ends_trial: true,
   on_finish: function(data){
     data.index = [initialD, dMap.get(initialD)];
@@ -167,7 +167,7 @@ var trial4 = {
     trial4._isReversed = isReversed;
     return choices;
   },
-  button_html: '<button class="button">%choice%</button>',
+  button_html: '<button class="button jspsych-btn">%choice%</button>',
   response_ends_trial: true,
   on_finish: function(data){
     data.index = [initialD, dMap.get(initialD)];
@@ -201,7 +201,7 @@ var trial5 = {
     trial5._isReversed = isReversed;
     return choices;
   },
-  button_html: '<button class="button">%choice%</button>',
+  button_html: '<button class="button jspsych-btn">%choice%</button>',
   response_ends_trial: true,
   on_finish: function(data){
     data.index = [initialD, dMap.get(initialD)];
