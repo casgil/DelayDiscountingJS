@@ -59,9 +59,12 @@ stepSizes.forEach(function(step, idx) {
     choices: function() {
       var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
       // Randomize order of choices
-      if (Math.random() < 0.5) {
+      var isReversed = Math.random() < 0.5;
+      if (isReversed) {
         choices = choices.reverse();
       }
+      // Store the order information for later use
+      trial._isReversed = isReversed;
       return choices;
     },
     button_html: '<button class="button">%choice%</button>',
@@ -69,9 +72,15 @@ stepSizes.forEach(function(step, idx) {
     on_finish: function(data){
       data.index = [initialD, dMap.get(initialD)];
       console.log();
-      // Check which choice was selected (delayed vs immediate)
-      var selectedChoice = data.choices[data.response];
-      data.delay = selectedChoice.includes('$1000 in');
+      
+      // Determine if delayed choice was selected
+      // If choices were reversed, response 0 = immediate, response 1 = delayed
+      // If choices were not reversed, response 0 = delayed, response 1 = immediate
+      if (trial._isReversed) {
+        data.delay = (data.response == 1);
+      } else {
+        data.delay = (data.response == 0);
+      }
       
       // Adjust delay for next trial (except for the last trial)
       if (idx < stepSizes.length - 1) {
