@@ -68,19 +68,21 @@ stepSizes.forEach(function(step, idx) {
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
       }
-      return ['$1000 in ' + dMap.get(initialD), '$500 now ']
+      var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+      // Randomize order of choices
+      if (Math.random() < 0.5) {
+        choices = choices.reverse();
+      }
+      return choices;
     },
     button_html: '<button class="button">%choice%</button>',
     response_ends_trial: true,
     on_finish: function(data){
       data.index = [initialD, dMap.get(initialD)];
       console.log();
-      if (data.response == 0) {
-        data.delay = true;
-      }
-      else {
-        data.delay = false;
-      }
+      // Check which choice was selected (delayed vs immediate)
+      var selectedChoice = data.choices[data.response];
+      data.delay = selectedChoice.includes('$1000 in');
     }
   };
   timeline.push(trial);
