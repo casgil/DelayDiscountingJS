@@ -49,54 +49,176 @@ const stim = '<div style="font-size:20px;font-weight:bold;">Which would you rath
 var timeline = [];
 //todo: change buttons
 
-// Step sizes for trials: first trial shows initialD without adjustment, then +/-8, +/-4, +/-2, +/-1
-var stepSizes = [0, 8, 4, 2, 1];
-
-stepSizes.forEach(function(step, idx) {
-  var trial = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: stim,
-    choices: function() {
-      var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
-      // Randomize order of choices
-      var isReversed = Math.random() < 0.5;
-      if (isReversed) {
-        choices = choices.reverse();
-      }
-      // Store the order information for later use
-      trial._isReversed = isReversed;
-      return choices;
-    },
-    button_html: '<button class="button">%choice%</button>',
-    response_ends_trial: true,
-    on_finish: function(data){
-      data.index = [initialD, dMap.get(initialD)];
-      console.log();
-      
-      // Determine if delayed choice was selected
-      // If choices were reversed, response 0 = immediate, response 1 = delayed
-      // If choices were not reversed, response 0 = delayed, response 1 = immediate
-      if (trial._isReversed) {
-        data.delay = (data.response == 1);
-      } else {
-        data.delay = (data.response == 0);
-      }
-      
-      // Adjust delay for next trial (except for the last trial)
-      if (idx < stepSizes.length - 1) {
-        if (data.delay) {
-          initialD = initialD + stepSizes[idx + 1];
-        } else {
-          initialD = initialD - stepSizes[idx + 1];
-        }
-        // clamp within bounds
-        if (initialD < 1) initialD = 1;
-        if (initialD > 31) initialD = 31;
-      }
+// Create individual trials to avoid closure issues
+var trial1 = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: stim,
+  choices: function() {
+    var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+    var isReversed = Math.random() < 0.5;
+    if (isReversed) {
+      choices = choices.reverse();
     }
-  };
-  timeline.push(trial);
-});
+    // Store the order for this trial
+    trial1._isReversed = isReversed;
+    return choices;
+  },
+  button_html: '<button class="button">%choice%</button>',
+  response_ends_trial: true,
+  on_finish: function(data){
+    data.index = [initialD, dMap.get(initialD)];
+    // Determine if delayed choice was selected based on randomization
+    if (trial1._isReversed) {
+      data.delay = (data.response == 1); // reversed: 0=immediate, 1=delayed
+    } else {
+      data.delay = (data.response == 0); // normal: 0=delayed, 1=immediate
+    }
+    console.log('Trial 1 - Delay chosen:', data.delay, 'Response:', data.response, 'Reversed:', trial1._isReversed);
+  }
+};
+
+var trial2 = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: stim,
+  choices: function() {
+    // Adjust delay based on previous trial
+    var lastData = jsPsych.data.get().last(1).values()[0];
+    if (lastData.delay) {
+      initialD = initialD + 8;
+    } else {
+      initialD = initialD - 8;
+    }
+    if (initialD < 1) initialD = 1;
+    if (initialD > 31) initialD = 31;
+    
+    var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+    var isReversed = Math.random() < 0.5;
+    if (isReversed) {
+      choices = choices.reverse();
+    }
+    trial2._isReversed = isReversed;
+    return choices;
+  },
+  button_html: '<button class="button">%choice%</button>',
+  response_ends_trial: true,
+  on_finish: function(data){
+    data.index = [initialD, dMap.get(initialD)];
+    if (trial2._isReversed) {
+      data.delay = (data.response == 1);
+    } else {
+      data.delay = (data.response == 0);
+    }
+    console.log('Trial 2 - Delay chosen:', data.delay, 'Response:', data.response, 'Reversed:', trial2._isReversed);
+  }
+};
+
+var trial3 = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: stim,
+  choices: function() {
+    var lastData = jsPsych.data.get().last(1).values()[0];
+    if (lastData.delay) {
+      initialD = initialD + 4;
+    } else {
+      initialD = initialD - 4;
+    }
+    if (initialD < 1) initialD = 1;
+    if (initialD > 31) initialD = 31;
+    
+    var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+    var isReversed = Math.random() < 0.5;
+    if (isReversed) {
+      choices = choices.reverse();
+    }
+    trial3._isReversed = isReversed;
+    return choices;
+  },
+  button_html: '<button class="button">%choice%</button>',
+  response_ends_trial: true,
+  on_finish: function(data){
+    data.index = [initialD, dMap.get(initialD)];
+    if (trial3._isReversed) {
+      data.delay = (data.response == 1);
+    } else {
+      data.delay = (data.response == 0);
+    }
+    console.log('Trial 3 - Delay chosen:', data.delay, 'Response:', data.response, 'Reversed:', trial3._isReversed);
+  }
+};
+
+var trial4 = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: stim,
+  choices: function() {
+    var lastData = jsPsych.data.get().last(1).values()[0];
+    if (lastData.delay) {
+      initialD = initialD + 2;
+    } else {
+      initialD = initialD - 2;
+    }
+    if (initialD < 1) initialD = 1;
+    if (initialD > 31) initialD = 31;
+    
+    var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+    var isReversed = Math.random() < 0.5;
+    if (isReversed) {
+      choices = choices.reverse();
+    }
+    trial4._isReversed = isReversed;
+    return choices;
+  },
+  button_html: '<button class="button">%choice%</button>',
+  response_ends_trial: true,
+  on_finish: function(data){
+    data.index = [initialD, dMap.get(initialD)];
+    if (trial4._isReversed) {
+      data.delay = (data.response == 1);
+    } else {
+      data.delay = (data.response == 0);
+    }
+    console.log('Trial 4 - Delay chosen:', data.delay, 'Response:', data.response, 'Reversed:', trial4._isReversed);
+  }
+};
+
+var trial5 = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: stim,
+  choices: function() {
+    var lastData = jsPsych.data.get().last(1).values()[0];
+    if (lastData.delay) {
+      initialD = initialD + 1;
+    } else {
+      initialD = initialD - 1;
+    }
+    if (initialD < 1) initialD = 1;
+    if (initialD > 31) initialD = 31;
+    
+    var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+    var isReversed = Math.random() < 0.5;
+    if (isReversed) {
+      choices = choices.reverse();
+    }
+    trial5._isReversed = isReversed;
+    return choices;
+  },
+  button_html: '<button class="button">%choice%</button>',
+  response_ends_trial: true,
+  on_finish: function(data){
+    data.index = [initialD, dMap.get(initialD)];
+    if (trial5._isReversed) {
+      data.delay = (data.response == 1);
+    } else {
+      data.delay = (data.response == 0);
+    }
+    console.log('Trial 5 - Delay chosen:', data.delay, 'Response:', data.response, 'Reversed:', trial5._isReversed);
+  }
+};
+
+timeline.push(trial1);
+timeline.push(trial2);
+timeline.push(trial3);
+timeline.push(trial4);
+timeline.push(trial5);
 
 
 
