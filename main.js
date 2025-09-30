@@ -60,7 +60,8 @@ const introStim = `
 var instructions = {
   type: jsPsychHtmlButtonResponse,
   stimulus: introStim,
-  choices: ['Begin']
+  choices: ['Begin'],
+  button_html: '<button class="button jspsych-btn">%choice%</button>'
 };
 
 timeline.push(instructions);
