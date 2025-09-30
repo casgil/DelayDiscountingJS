@@ -49,6 +49,22 @@ const stim = '<div style="font-size:20px;font-weight:bold;">Which would you rath
 var timeline = [];
 //todo: change buttons
 
+// Instructions screen
+const introStim = '
+  <div style="font-size:24px;font-weight:bold;margin-bottom:12px;">Two Choice Task</div>
+  <div style="font-size:18px;line-height:1.5;max-width:60ch;margin:0 auto;">
+    You will see a series of choices between two options. Your task is to select the option you prefer for each choice presented. There are no right or wrong answers. We are interested in your personal preferences.
+  </div>
+';
+
+var instructions = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: introStim,
+  choices: ['Begin']
+};
+
+timeline.push(instructions);
+
 // Create individual trials to avoid closure issues
 var trial1 = {
   type: jsPsychHtmlButtonResponse,
