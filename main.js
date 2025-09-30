@@ -57,17 +57,6 @@ stepSizes.forEach(function(step, idx) {
     type: jsPsychHtmlButtonResponse,
     stimulus: stim,
     choices: function() {
-      if (idx > 0) {
-        var last_trial_choice = jsPsych.data.get().last(1).values()[0].delay;
-        if (last_trial_choice) {
-          initialD = initialD + step;
-        } else {
-          initialD = initialD - step;
-        }
-        // clamp within bounds
-        if (initialD < 1) initialD = 1;
-        if (initialD > 31) initialD = 31;
-      }
       var choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
       // Randomize order of choices
       if (Math.random() < 0.5) {
@@ -83,6 +72,18 @@ stepSizes.forEach(function(step, idx) {
       // Check which choice was selected (delayed vs immediate)
       var selectedChoice = data.choices[data.response];
       data.delay = selectedChoice.includes('$1000 in');
+      
+      // Adjust delay for next trial (except for the last trial)
+      if (idx < stepSizes.length - 1) {
+        if (data.delay) {
+          initialD = initialD + stepSizes[idx + 1];
+        } else {
+          initialD = initialD - stepSizes[idx + 1];
+        }
+        // clamp within bounds
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
+      }
     }
   };
   timeline.push(trial);
