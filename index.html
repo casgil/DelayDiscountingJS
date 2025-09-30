@@ -29,7 +29,8 @@
         overflow-x: hidden; 
         }
         
-      .button {
+      /* Target all possible button selectors */
+      .button, .jspsych-btn, button, input[type="button"] {
         width: 300px !important;
         height: 300px !important;
         font-size: 16px !important;
@@ -38,6 +39,7 @@
         border: 2px solid #ccc !important;
         border-radius: 8px !important;
         background-color: #8c58db !important;
+        background: #8c58db !important;
         cursor: pointer !important;
         text-align: center !important;
         display: inline-block !important;
@@ -49,38 +51,26 @@
         min-height: 300px !important;
         max-width: 300px !important;
         max-height: 300px !important;
+        color: white !important;
       }
       
-      .button:hover {
+      .button:hover, .jspsych-btn:hover, button:hover, input[type="button"]:hover {
         background-color: #8c58db !important;
+        background: #8c58db !important;
         border-color: #999 !important;
+        color: white !important;
       }
       
-      .button:active {
+      .button:active, .jspsych-btn:active, button:active, input[type="button"]:active {
         background-color: #8c58db !important;
+        background: #8c58db !important;
+        color: white !important;
       }
       
-      /* Also target jsPsych button classes */
-      .jspsych-btn {
-        width: 300px !important;
-        height: 300px !important;
-        font-size: 16px !important;
-        margin: 10px !important;
-        padding: 20px !important;
-        border: 2px solid #ccc !important;
-        border-radius: 8px !important;
+      .button:focus, .jspsych-btn:focus, button:focus, input[type="button"]:focus {
         background-color: #8c58db !important;
-        cursor: pointer !important;
-        text-align: center !important;
-        display: inline-block !important;
-        vertical-align: top !important;
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        box-sizing: border-box !important;
-        min-width: 300px !important;
-        min-height: 300px !important;
-        max-width: 300px !important;
-        max-height: 300px !important;
+        background: #8c58db !important;
+        color: white !important;
       }       
     </style>
   </head>
