@@ -71,6 +71,49 @@
         background-color: #8c58db !important;
         background: #8c58db !important;
         color: white !important;
+      }
+      
+      /* Mobile optimizations */
+      @media screen and (max-width: 768px) {
+        .button, .jspsych-btn, button, input[type="button"] {
+          width: 45vw !important;
+          height: 45vw !important;
+          min-width: 200px !important;
+          min-height: 200px !important;
+          max-width: 300px !important;
+          max-height: 300px !important;
+          font-size: 18px !important;
+          margin: 5px !important;
+          padding: 15px !important;
+          border: 3px solid #ccc !important;
+          touch-action: manipulation !important;
+          -webkit-tap-highlight-color: transparent !important;
+        }
+        
+        /* Stack buttons vertically on very small screens */
+        @media screen and (max-width: 480px) {
+          .button, .jspsych-btn, button, input[type="button"] {
+            width: 80vw !important;
+            height: 20vh !important;
+            min-width: 250px !important;
+            min-height: 80px !important;
+            max-width: 90vw !important;
+            max-height: 25vh !important;
+            font-size: 16px !important;
+            margin: 10px auto !important;
+            display: block !important;
+          }
+        }
+      }
+      
+      /* Touch device optimizations */
+      @media (hover: none) and (pointer: coarse) {
+        .button, .jspsych-btn, button, input[type="button"] {
+          min-height: 44px !important;
+          min-width: 44px !important;
+          touch-action: manipulation !important;
+          -webkit-tap-highlight-color: transparent !important;
+        }
       }       
     </style>
   </head>
