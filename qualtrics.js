@@ -97,38 +97,134 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       button_html: '<button class="jspsych-btn begin-btn">%choice%</button>'
     });
 
-    // Create 5 trials
+    // Create 5 trials individually to avoid closure issues
     const stepSizes = [0, 8, 4, 2, 1];
-    for (let i = 0; i < 5; i++) {
-      timeline.push({
-        type: jsPsychHtmlButtonResponse,
-        stimulus: stim,
-        choices: function() {
-          // Adjust delay based on previous trial (skip for first trial)
-          if (i > 0) {
-            const lastData = jsPsych.data.get().last(1).values()[0];
-            if (lastData && lastData.delay) {
-              initialD = initialD + stepSizes[i];
-            } else {
-              initialD = initialD - stepSizes[i];
-            }
-            if (initialD < 1) initialD = 1;
-            if (initialD > 31) initialD = 31;
-          }
-          
-          let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
-          if (Math.random() < 0.5) choices.reverse();
-          this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
-          return choices;
-        },
-        button_html: '<button class="jspsych-btn">%choice%</button>',
-        on_finish: function(data) {
-          const delayedChosen = (data.response === this._delayedIndex);
-          data.delay = delayedChosen;
-          data.index = [initialD, dMap.get(initialD)];
+    
+    // Trial 1 (no adjustment)
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+      stimulus: stim,
+      choices: function() {
+        let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+        if (Math.random() < 0.5) choices.reverse();
+        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        return choices;
+      },
+      button_html: '<button class="jspsych-btn">%choice%</button>',
+      on_finish: function(data) {
+        const delayedChosen = (data.response === this._delayedIndex);
+        data.delay = delayedChosen;
+        data.index = [initialD, dMap.get(initialD)];
+      }
+    });
+
+    // Trial 2 (adjust by 8)
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+      stimulus: stim,
+      choices: function() {
+        const lastData = jsPsych.data.get().last(1).values()[0];
+        if (lastData && lastData.delay) {
+          initialD = initialD + 8;
+        } else {
+          initialD = initialD - 8;
         }
-      });
-    }
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
+        
+        let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+        if (Math.random() < 0.5) choices.reverse();
+        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        return choices;
+      },
+      button_html: '<button class="jspsych-btn">%choice%</button>',
+      on_finish: function(data) {
+        const delayedChosen = (data.response === this._delayedIndex);
+        data.delay = delayedChosen;
+        data.index = [initialD, dMap.get(initialD)];
+      }
+    });
+
+    // Trial 3 (adjust by 4)
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+      stimulus: stim,
+      choices: function() {
+        const lastData = jsPsych.data.get().last(1).values()[0];
+        if (lastData && lastData.delay) {
+          initialD = initialD + 4;
+        } else {
+          initialD = initialD - 4;
+        }
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
+        
+        let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+        if (Math.random() < 0.5) choices.reverse();
+        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        return choices;
+      },
+      button_html: '<button class="jspsych-btn">%choice%</button>',
+      on_finish: function(data) {
+        const delayedChosen = (data.response === this._delayedIndex);
+        data.delay = delayedChosen;
+        data.index = [initialD, dMap.get(initialD)];
+      }
+    });
+
+    // Trial 4 (adjust by 2)
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+      stimulus: stim,
+      choices: function() {
+        const lastData = jsPsych.data.get().last(1).values()[0];
+        if (lastData && lastData.delay) {
+          initialD = initialD + 2;
+        } else {
+          initialD = initialD - 2;
+        }
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
+        
+        let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+        if (Math.random() < 0.5) choices.reverse();
+        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        return choices;
+      },
+      button_html: '<button class="jspsych-btn">%choice%</button>',
+      on_finish: function(data) {
+        const delayedChosen = (data.response === this._delayedIndex);
+        data.delay = delayedChosen;
+        data.index = [initialD, dMap.get(initialD)];
+      }
+    });
+
+    // Trial 5 (adjust by 1)
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+      stimulus: stim,
+      choices: function() {
+        const lastData = jsPsych.data.get().last(1).values()[0];
+        if (lastData && lastData.delay) {
+          initialD = initialD + 1;
+        } else {
+          initialD = initialD - 1;
+        }
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
+        
+        let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+        if (Math.random() < 0.5) choices.reverse();
+        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        return choices;
+      },
+      button_html: '<button class="jspsych-btn">%choice%</button>',
+      on_finish: function(data) {
+        const delayedChosen = (data.response === this._delayedIndex);
+        data.delay = delayedChosen;
+        data.index = [initialD, dMap.get(initialD)];
+      }
+    });
 
     console.log('Timeline created with', timeline.length, 'trials');
 
