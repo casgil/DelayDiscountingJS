@@ -123,15 +123,6 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       type: jsPsychHtmlButtonResponse,
       stimulus: stim,
       choices: function() {
-        const lastData = jsPsych.data.get().last(1).values()[0];
-        if (lastData && lastData.delay) {
-          initialD = initialD + 8;
-        } else {
-          initialD = initialD - 8;
-        }
-        if (initialD < 1) initialD = 1;
-        if (initialD > 31) initialD = 31;
-        
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
         if (Math.random() < 0.5) choices.reverse();
         this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
@@ -142,6 +133,15 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         const delayedChosen = (data.response === this._delayedIndex);
         data.delay = delayedChosen;
         data.index = [initialD, dMap.get(initialD)];
+        
+        // Adjust for next trial
+        if (delayedChosen) {
+          initialD = initialD + 8;
+        } else {
+          initialD = initialD - 8;
+        }
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
       }
     });
 
@@ -150,15 +150,6 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       type: jsPsychHtmlButtonResponse,
       stimulus: stim,
       choices: function() {
-        const lastData = jsPsych.data.get().last(1).values()[0];
-        if (lastData && lastData.delay) {
-          initialD = initialD + 4;
-        } else {
-          initialD = initialD - 4;
-        }
-        if (initialD < 1) initialD = 1;
-        if (initialD > 31) initialD = 31;
-        
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
         if (Math.random() < 0.5) choices.reverse();
         this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
@@ -169,6 +160,15 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         const delayedChosen = (data.response === this._delayedIndex);
         data.delay = delayedChosen;
         data.index = [initialD, dMap.get(initialD)];
+        
+        // Adjust for next trial
+        if (delayedChosen) {
+          initialD = initialD + 4;
+        } else {
+          initialD = initialD - 4;
+        }
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
       }
     });
 
@@ -177,15 +177,6 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       type: jsPsychHtmlButtonResponse,
       stimulus: stim,
       choices: function() {
-        const lastData = jsPsych.data.get().last(1).values()[0];
-        if (lastData && lastData.delay) {
-          initialD = initialD + 2;
-        } else {
-          initialD = initialD - 2;
-        }
-        if (initialD < 1) initialD = 1;
-        if (initialD > 31) initialD = 31;
-        
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
         if (Math.random() < 0.5) choices.reverse();
         this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
@@ -196,6 +187,15 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         const delayedChosen = (data.response === this._delayedIndex);
         data.delay = delayedChosen;
         data.index = [initialD, dMap.get(initialD)];
+        
+        // Adjust for next trial
+        if (delayedChosen) {
+          initialD = initialD + 2;
+        } else {
+          initialD = initialD - 2;
+        }
+        if (initialD < 1) initialD = 1;
+        if (initialD > 31) initialD = 31;
       }
     });
 
@@ -204,15 +204,6 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       type: jsPsychHtmlButtonResponse,
       stimulus: stim,
       choices: function() {
-        const lastData = jsPsych.data.get().last(1).values()[0];
-        if (lastData && lastData.delay) {
-          initialD = initialD + 1;
-        } else {
-          initialD = initialD - 1;
-        }
-        if (initialD < 1) initialD = 1;
-        if (initialD > 31) initialD = 31;
-        
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
         if (Math.random() < 0.5) choices.reverse();
         this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
@@ -223,6 +214,8 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         const delayedChosen = (data.response === this._delayedIndex);
         data.delay = delayedChosen;
         data.index = [initialD, dMap.get(initialD)];
+        
+        // No adjustment needed for last trial
       }
     });
 
