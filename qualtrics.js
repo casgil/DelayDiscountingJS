@@ -29,11 +29,53 @@ Qualtrics.SurveyEngine.addOnReady(function() {
   (async () => {
     const base = 'https://casgil.github.io/DelayDiscountingJS/';
 
+    // Add custom CSS for button styling
+    const style = document.createElement('style');
+    style.textContent = `
+      .jspsych-btn {
+        width: 320px !important; height: 200px !important; min-width: 320px !important; min-height: 200px !important;
+        max-width: 320px !important; max-height: 200px !important; font-size: 22px !important; font-weight: 700 !important;
+        line-height: 1.35 !important; margin: 10px !important; padding: 22px !important; box-sizing: border-box !important;
+        background: #8c58db !important; color: #fff !important; border: 2px solid #ccc !important; border-radius: 8px !important;
+        cursor: pointer !important; text-align: center !important; display: inline-block !important; vertical-align: top !important;
+        word-wrap: break-word !important; overflow-wrap: break-word !important;
+      }
+      .jspsych-btn:hover { background: #8c58db !important; }
+      .jspsych-btn:active, .jspsych-btn.pressed {
+        background: #7a49cb !important; border-color: #666 !important; box-shadow: inset 0 2px 6px rgba(0,0,0,0.25) !important;
+        transform: scale(0.98) !important;
+      }
+      .begin-btn {
+        width: 200px !important; height: 60px !important; min-width: 200px !important; min-height: 60px !important;
+        max-width: 200px !important; max-height: 60px !important; font-size: 18px !important; padding: 10px !important;
+      }
+      @media (max-width: 768px) {
+        .jspsych-btn { width: 48vw !important; height: 28vw !important; min-width: 220px !important; min-height: 150px !important;
+          max-width: 320px !important; max-height: 200px !important; font-size: 22px !important; padding: 18px !important; }
+      }
+      @media (max-width: 480px) {
+        .jspsych-btn { width: 88vw !important; height: 18vh !important; min-width: 280px !important; min-height: 110px !important;
+          max-width: 92vw !important; max-height: 22vh !important; font-size: 20px !important; padding: 16px !important;
+          display: block !important; margin: 10px auto !important; }
+      }
+    `;
+    document.head.appendChild(style);
+
     // Load CSS and scripts from GitHub Pages
     await loadCSS(base + 'jspsych/jspsych.css');
     await loadScript(base + 'jspsych/jspsych.js');
     await loadScript(base + 'jspsych/plugin-html-button-response.js');
     await loadScript(base + 'main.js'); // defines global `timeline`
+
+    // Ensure timeline exists and has all trials
+    if (!window.timeline || !Array.isArray(window.timeline)) {
+      console.error('Timeline not loaded properly');
+      try { Qualtrics.SurveyEngine.setEmbeddedData('dd_error', 'Timeline failed to load'); } catch(e) {}
+      try { this.showNextButton(); } catch(e) {}
+      return;
+    }
+
+    console.log('Timeline loaded with', window.timeline.length, 'trials');
 
     // Initialize and run
     const jsPsych = initJsPsych({
