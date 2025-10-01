@@ -106,8 +106,9 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       stimulus: stim,
       choices: function() {
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
-        if (Math.random() < 0.5) choices.reverse();
-        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        var isReversed = Math.random() < 0.5;
+        if (isReversed) choices.reverse();
+        this._isReversed = isReversed;
         return choices;
       },
       button_html: '<button class="jspsych-btn">%choice%</button>',
@@ -124,21 +125,26 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       stimulus: stim,
       choices: function() {
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
-        if (Math.random() < 0.5) choices.reverse();
-        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        var isReversed = Math.random() < 0.5;
+        if (isReversed) choices.reverse();
+        this._isReversed = isReversed;
         return choices;
       },
       button_html: '<button class="jspsych-btn">%choice%</button>',
       on_finish: function(data) {
-        const delayedChosen = (data.response === this._delayedIndex);
-        data.delay = delayedChosen;
+        // Determine if delayed choice was selected based on randomization
+        if (this._isReversed) {
+          data.delay = (data.response == 1); // reversed: 0=immediate, 1=delayed
+        } else {
+          data.delay = (data.response == 0); // normal: 0=delayed, 1=immediate
+        }
         data.index = [initialD, dMap.get(initialD)];
         
         // Adjust for next trial
-        if (delayedChosen) {
-          initialD = initialD + 8;
+        if (data.delay) {
+          initialD = initialD + 8; // Choose delayed -> make delay longer (harder)
         } else {
-          initialD = initialD - 8;
+          initialD = initialD - 8; // Choose immediate -> make delay shorter (easier)
         }
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
@@ -151,21 +157,26 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       stimulus: stim,
       choices: function() {
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
-        if (Math.random() < 0.5) choices.reverse();
-        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        var isReversed = Math.random() < 0.5;
+        if (isReversed) choices.reverse();
+        this._isReversed = isReversed;
         return choices;
       },
       button_html: '<button class="jspsych-btn">%choice%</button>',
       on_finish: function(data) {
-        const delayedChosen = (data.response === this._delayedIndex);
-        data.delay = delayedChosen;
+        // Determine if delayed choice was selected based on randomization
+        if (this._isReversed) {
+          data.delay = (data.response == 1); // reversed: 0=immediate, 1=delayed
+        } else {
+          data.delay = (data.response == 0); // normal: 0=delayed, 1=immediate
+        }
         data.index = [initialD, dMap.get(initialD)];
         
         // Adjust for next trial
-        if (delayedChosen) {
-          initialD = initialD + 4;
+        if (data.delay) {
+          initialD = initialD + 4; // Choose delayed -> make delay longer (harder)
         } else {
-          initialD = initialD - 4;
+          initialD = initialD - 4; // Choose immediate -> make delay shorter (easier)
         }
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
@@ -178,21 +189,26 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       stimulus: stim,
       choices: function() {
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
-        if (Math.random() < 0.5) choices.reverse();
-        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        var isReversed = Math.random() < 0.5;
+        if (isReversed) choices.reverse();
+        this._isReversed = isReversed;
         return choices;
       },
       button_html: '<button class="jspsych-btn">%choice%</button>',
       on_finish: function(data) {
-        const delayedChosen = (data.response === this._delayedIndex);
-        data.delay = delayedChosen;
+        // Determine if delayed choice was selected based on randomization
+        if (this._isReversed) {
+          data.delay = (data.response == 1); // reversed: 0=immediate, 1=delayed
+        } else {
+          data.delay = (data.response == 0); // normal: 0=delayed, 1=immediate
+        }
         data.index = [initialD, dMap.get(initialD)];
         
         // Adjust for next trial
-        if (delayedChosen) {
-          initialD = initialD + 2;
+        if (data.delay) {
+          initialD = initialD + 2; // Choose delayed -> make delay longer (harder)
         } else {
-          initialD = initialD - 2;
+          initialD = initialD - 2; // Choose immediate -> make delay shorter (easier)
         }
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
@@ -205,14 +221,19 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       stimulus: stim,
       choices: function() {
         let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
-        if (Math.random() < 0.5) choices.reverse();
-        this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+        var isReversed = Math.random() < 0.5;
+        if (isReversed) choices.reverse();
+        this._isReversed = isReversed;
         return choices;
       },
       button_html: '<button class="jspsych-btn">%choice%</button>',
       on_finish: function(data) {
-        const delayedChosen = (data.response === this._delayedIndex);
-        data.delay = delayedChosen;
+        // Determine if delayed choice was selected based on randomization
+        if (this._isReversed) {
+          data.delay = (data.response == 1); // reversed: 0=immediate, 1=delayed
+        } else {
+          data.delay = (data.response == 0); // normal: 0=delayed, 1=immediate
+        }
         data.index = [initialD, dMap.get(initialD)];
         
         // No adjustment needed for last trial
