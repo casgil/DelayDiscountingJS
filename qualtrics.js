@@ -65,17 +65,72 @@ Qualtrics.SurveyEngine.addOnReady(function() {
     await loadCSS(base + 'jspsych/jspsych.css');
     await loadScript(base + 'jspsych/jspsych.js');
     await loadScript(base + 'jspsych/plugin-html-button-response.js');
-    await loadScript(base + 'main.js'); // defines global `timeline`
 
-    // Ensure timeline exists and has all trials
-    if (!window.timeline || !Array.isArray(window.timeline)) {
-      console.error('Timeline not loaded properly');
-      try { Qualtrics.SurveyEngine.setEmbeddedData('dd_error', 'Timeline failed to load'); } catch(e) {}
-      try { this.showNextButton(); } catch(e) {}
-      return;
+    // Create timeline directly (self-contained)
+    let initialD = 16;
+    const dMap = new Map([
+      [1,"1 hour"],[2,"2 hours"],[3,"3 hours"],[4,"4 hours"],[5,"6 hours"],[6,"9 hours"],
+      [7,"12 hours"],[8,"1 day"],[9,"1 and a half days"],[10,"2 days"],[11,"3 days"],[12,"4 days"],
+      [13,"1 week"],[14,"1 and a half weeks"],[15,"2 weeks"],[16,"3 weeks"],[17,"1 month"],
+      [18,"2 months"],[19,"3 months"],[20,"4 months"],[21,"6 months"],[22,"8 months"],[23,"1 year"],
+      [24,"2 years"],[25,"3 years"],[26,"4 years"],[27,"5 years"],[28,"8 years"],[29,"12 years"],
+      [30,"18 years"],[31,"25 years"]
+    ]);
+
+    const stim = '<div style="font-size:20px;font-weight:bold;">Which would you rather get?</div>';
+    const introStim = `
+      <div style="font-size:24px;font-weight:bold;margin-bottom:12px;">Two Choice Task</div>
+      <div style="font-size:18px;line-height:1.5;max-width:60ch;margin:0 auto;">
+        You will see a series of choices between two options.<br><br>
+        Your task is to select the option you prefer for each choice presented.<br><br>
+        There are no right or wrong answers. We are interested in your personal preferences.
+      </div>
+    `;
+
+    const timeline = [];
+
+    // Instructions
+    timeline.push({
+      type: jsPsychHtmlButtonResponse,
+      stimulus: introStim,
+      choices: ['Begin'],
+      button_html: '<button class="jspsych-btn begin-btn">%choice%</button>'
+    });
+
+    // Create 5 trials
+    const stepSizes = [0, 8, 4, 2, 1];
+    for (let i = 0; i < 5; i++) {
+      timeline.push({
+        type: jsPsychHtmlButtonResponse,
+        stimulus: stim,
+        choices: function() {
+          // Adjust delay based on previous trial (skip for first trial)
+          if (i > 0) {
+            const lastData = jsPsych.data.get().last(1).values()[0];
+            if (lastData && lastData.delay) {
+              initialD = initialD + stepSizes[i];
+            } else {
+              initialD = initialD - stepSizes[i];
+            }
+            if (initialD < 1) initialD = 1;
+            if (initialD > 31) initialD = 31;
+          }
+          
+          let choices = ['$1000 in ' + dMap.get(initialD), '$500 now '];
+          if (Math.random() < 0.5) choices.reverse();
+          this._delayedIndex = choices.findIndex(x => x.startsWith('$1000 in'));
+          return choices;
+        },
+        button_html: '<button class="jspsych-btn">%choice%</button>',
+        on_finish: function(data) {
+          const delayedChosen = (data.response === this._delayedIndex);
+          data.delay = delayedChosen;
+          data.index = [initialD, dMap.get(initialD)];
+        }
+      });
     }
 
-    console.log('Timeline loaded with', window.timeline.length, 'trials');
+    console.log('Timeline created with', timeline.length, 'trials');
 
     // Initialize and run
     const jsPsych = initJsPsych({
