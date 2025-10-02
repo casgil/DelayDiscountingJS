@@ -142,9 +142,9 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         
         // Adjust for next trial
         if (data.delay) {
-          initialD = initialD + 8; // Choose delayed -> make delay longer (harder)
+          initialD = initialD - 8; // Choose delayed -> make delay shorter (easier)
         } else {
-          initialD = initialD - 8; // Choose immediate -> make delay shorter (easier)
+          initialD = initialD + 8; // Choose immediate -> make delay longer (harder)
         }
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
@@ -174,9 +174,9 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         
         // Adjust for next trial
         if (data.delay) {
-          initialD = initialD + 4; // Choose delayed -> make delay longer (harder)
+          initialD = initialD - 4; // Choose delayed -> make delay shorter (easier)
         } else {
-          initialD = initialD - 4; // Choose immediate -> make delay shorter (easier)
+          initialD = initialD + 4; // Choose immediate -> make delay longer (harder)
         }
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
@@ -206,9 +206,9 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         
         // Adjust for next trial
         if (data.delay) {
-          initialD = initialD + 2; // Choose delayed -> make delay longer (harder)
+          initialD = initialD - 2; // Choose delayed -> make delay shorter (easier)
         } else {
-          initialD = initialD - 2; // Choose immediate -> make delay shorter (easier)
+          initialD = initialD + 2; // Choose immediate -> make delay longer (harder)
         }
         if (initialD < 1) initialD = 1;
         if (initialD > 31) initialD = 31;
