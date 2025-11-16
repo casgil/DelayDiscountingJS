@@ -164,7 +164,37 @@
     var jsPsych = initJsPsych({
         //timeline: timeline,
       on_finish: function() {
-        jsPsych.data.displayData();
+        // Check if running in iframe (Qualtrics integration)
+        var isInIframe = window.self !== window.top;
+        if (isInIframe) {
+          // Collect trial data
+          var allData = jsPsych.data.get().filter({trial_type: 'html-button-response'});
+          var trialData = [];
+          
+          // Extract trial data (skip instructions)
+          for (var i = 0; i < allData.count(); i++) {
+            var trial = allData.values()[i];
+            if (trial.index) { // Only include actual choice trials
+              trialData.push({
+                trialNum: trialData.length + 1,
+                delayIndex: trial.index[0],
+                delayLabel: trial.index[1],
+                choseDelayed: trial.delay ? 1 : 0,
+                response: trial.response,
+                rt: trial.rt
+              });
+            }
+          }
+          
+          // Send completion message to parent (Qualtrics)
+          window.parent.postMessage({
+            type: 'DELAY_DISCOUNTING_COMPLETE',
+            data: trialData
+          }, '*');
+        } else {
+          // Normal standalone mode - display data
+          jsPsych.data.displayData();
+        }
     }
     });
     /* add touch pressed-state handling for mobile */
