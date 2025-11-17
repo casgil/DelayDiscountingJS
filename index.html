@@ -192,11 +192,46 @@
             data: trialData
           }, '*');
         } else {
-          // Normal standalone mode - display data
-          jsPsych.data.displayData();
+          // Normal standalone mode - download data file
+          var timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+          var filename = 'delay_discounting_data_' + timestamp + '.csv';
+          jsPsych.data.get().localSave('csv', filename);
+          
+          // Show completion screen with actual filename
+          showCompletionScreen(filename);
         }
     }
     });
+    
+    /**
+     * Displays a completion screen after the task is finished
+     * @param {string} filename - The name of the downloaded data file
+     */
+    function showCompletionScreen(filename) {
+      var displayElement = jsPsych.getDisplayElement();
+      displayElement.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="font-size: clamp(36px, 8vw, 48px); margin-bottom: 20px;">✅</div>
+          <h1 style="font-size: clamp(24px, 5vw, 32px); color: #8c58db; margin-bottom: 20px; font-weight: bold;">Task Completed!</h1>
+          <p style="font-size: clamp(16px, 3vw, 18px); line-height: 1.6; margin-bottom: 30px; color: #333;">
+            Thank you for completing the delay discounting task.<br><br>
+            Your data has been automatically downloaded to your computer.
+          </p>
+          <div style="background-color: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 20px; word-break: break-all;">
+            <p style="font-size: clamp(14px, 2.5vw, 16px); color: #666; margin: 0;">
+              <strong>File name:</strong><br>
+              <code style="font-size: clamp(12px, 2vw, 14px); color: #8c58db; background-color: white; padding: 5px 10px; border-radius: 4px; display: inline-block; margin-top: 8px;">${filename}</code>
+            </p>
+            <p style="font-size: clamp(12px, 2vw, 14px); color: #888; margin: 15px 0 0 0;">
+              Check your Downloads folder if you don't see the file.
+            </p>
+          </div>
+          <p style="font-size: clamp(14px, 2.5vw, 16px); color: #666;">
+            You may now close this window.
+          </p>
+        </div>
+      `;
+    }
     /* add touch pressed-state handling for mobile */
     document.addEventListener('touchstart', function(e) {
       if (e.target && (e.target.matches('button') || e.target.closest('button'))) {

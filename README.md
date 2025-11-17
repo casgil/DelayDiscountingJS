@@ -17,7 +17,8 @@ Reference: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4461028/
 - On completion of each trial, the following are recorded per trial:
   - `data.index`: `[currentDelayIndex, currentDelayLabel]`
   - `data.delay`: `true` if the delayed option was selected, else `false`
-- At the end of the task, the data are displayed on-screen (`jsPsych.data.displayData()`)
+- At the end of the task, the data file is automatically downloaded as a CSV file
+- A completion screen is displayed confirming the download
 
 ## Files
 - `index.html`
@@ -54,9 +55,9 @@ Or use any "Live Server" extension from your editor.
 - Touch feedback via `.pressed` class on touch devices
 
 ## Data Export
-Currently, results are shown with `jsPsych.data.displayData()`. To export:
-- Quick copy: copy from the results table
-- Programmatic download: replace `displayData()` with `jsPsych.data.get().localSave('csv','results.csv')` or implement a custom save endpoint
+- **Standalone mode**: Data is automatically downloaded as a CSV file with timestamp (e.g., `delay_discounting_data_2024-01-15T10-30-45.csv`)
+- **Qualtrics integration**: Data is automatically saved to Qualtrics embedded data fields via postMessage
+- The CSV file contains all trial data including delay indices, labels, choices, and response times
 
 ## Notes
 - Buttons carry both `button` and `jspsych-btn` classes to ensure CSS overrides jsPsych defaults
