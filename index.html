@@ -160,6 +160,9 @@
   <body></body>
   <script>
 
+    // Track task start time for completion time calculation
+    var taskStartTime = Date.now();
+
     /* initialize jsPsych */
     var jsPsych = initJsPsych({
         //timeline: timeline,
@@ -192,16 +195,147 @@
             data: trialData
           }, '*');
         } else {
-          // Normal standalone mode - download data file
+          // Normal standalone mode - download data file with Qualtrics-compatible format
           var timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
           var filename = 'delay_discounting_data_' + timestamp + '.csv';
-          jsPsych.data.get().localSave('csv', filename);
+          
+          // Process data to match Qualtrics embedded data structure
+          var processedData = processDataForExport(jsPsych);
+          saveQualtricsFormatCSV(processedData, filename);
           
           // Show completion screen with actual filename
           showCompletionScreen(filename);
         }
     }
     });
+    
+    /**
+     * Processes jsPsych data to match Qualtrics embedded data structure
+     * @param {Object} jsPsych - The jsPsych instance
+     * @returns {Object} Processed data object with all Qualtrics-compatible fields
+     */
+    function processDataForExport(jsPsych) {
+      var allData = jsPsych.data.get().filter({trial_type: 'html-button-response'});
+      var trialData = [];
+      var taskEndTime = Date.now();
+      
+      // Extract trial data (skip instructions)
+      for (var i = 0; i < allData.count(); i++) {
+        var trial = allData.values()[i];
+        if (trial.index) { // Only include actual choice trials
+          trialData.push({
+            trialNum: trialData.length + 1,
+            delayIndex: trial.index[0],
+            delayLabel: trial.index[1],
+            choseDelayed: trial.delay ? 1 : 0,
+            response: trial.response,
+            rt: trial.rt
+          });
+        }
+      }
+      
+      // Calculate final delay index (indifference point)
+      var finalDelayIndex = null;
+      var finalDelayLabel = null;
+      if (trialData.length > 0) {
+        var lastTrial = trialData[trialData.length - 1];
+        finalDelayIndex = lastTrial.delayIndex;
+        finalDelayLabel = lastTrial.delayLabel;
+      }
+      
+      // Calculate completion time using tracked start time
+      var completionTime = (taskEndTime - taskStartTime) / 1000;
+      
+      // Build processed data object matching Qualtrics structure
+      var processed = {
+        // Individual trial data
+        trials: trialData,
+        // Summary fields
+        finalDelayIndex: finalDelayIndex,
+        finalDelayLabel: finalDelayLabel,
+        completionTime: completionTime.toFixed(1),
+        rawData: JSON.stringify(trialData),
+        completed: 'Yes',
+        startTime: new Date(taskStartTime).toISOString(),
+        endTime: new Date(taskEndTime).toISOString()
+      };
+      
+      return processed;
+    }
+    
+    /**
+     * Saves data in CSV format matching Qualtrics embedded data structure
+     * @param {Object} data - Processed data object
+     * @param {string} filename - Filename for the CSV file
+     */
+    function saveQualtricsFormatCSV(data, filename) {
+      var csvRows = [];
+      
+      // Header row
+      var headers = [];
+      var values = [];
+      
+      // Add trial data fields
+      for (var i = 1; i <= 5; i++) {
+        headers.push('DD_Trial' + i + '_DelayIndex');
+        headers.push('DD_Trial' + i + '_DelayLabel');
+        headers.push('DD_Trial' + i + '_ChoseDelayed');
+        
+        if (i <= data.trials.length) {
+          var trial = data.trials[i - 1];
+          values.push(trial.delayIndex);
+          values.push(trial.delayLabel);
+          values.push(trial.choseDelayed);
+        } else {
+          values.push('');
+          values.push('');
+          values.push('');
+        }
+      }
+      
+      // Add summary fields
+      headers.push('DD_FinalDelayIndex');
+      headers.push('DD_FinalDelayLabel');
+      headers.push('DD_CompletionTime');
+      headers.push('DD_RawData');
+      headers.push('DD_Completed');
+      headers.push('DD_StartTime');
+      headers.push('DD_EndTime');
+      
+      values.push(data.finalDelayIndex || '');
+      values.push(data.finalDelayLabel || '');
+      values.push(data.completionTime);
+      values.push(data.rawData);
+      values.push(data.completed);
+      values.push(data.startTime);
+      values.push(data.endTime);
+      
+      // Create CSV content
+      csvRows.push(headers.join(','));
+      
+      // Escape values for CSV (handle commas, quotes, newlines)
+      var escapedValues = values.map(function(val) {
+        if (val === null || val === undefined) return '';
+        var str = String(val);
+        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+          return '"' + str.replace(/"/g, '""') + '"';
+        }
+        return str;
+      });
+      csvRows.push(escapedValues.join(','));
+      
+      // Convert to CSV string and download
+      var csvContent = csvRows.join('\n');
+      var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      var link = document.createElement('a');
+      var url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
     
     /**
      * Displays a completion screen after the task is finished
