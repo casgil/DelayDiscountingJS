@@ -55,9 +55,28 @@ Or use any "Live Server" extension from your editor.
 - Touch feedback via `.pressed` class on touch devices
 
 ## Data Export
-- **Standalone mode**: Data is automatically downloaded as a CSV file with timestamp (e.g., `delay_discounting_data_2024-01-15T10-30-45.csv`)
-- **Qualtrics integration**: Data is automatically saved to Qualtrics embedded data fields via postMessage
-- The CSV file contains all trial data including delay indices, labels, choices, and response times
+
+### Standalone Mode (GitHub Pages / index.html)
+- Data is automatically downloaded as a CSV file with timestamp (e.g., `delay_discounting_data_2024-01-15T10-30-45.csv`)
+- **CSV format matches Qualtrics embedded data structure** for easy data merging
+- Includes the following fields:
+  - **Trial data** (for each of 5 trials):
+    - `DD_Trial[N]_DelayIndex`: Numeric delay index (1-31)
+    - `DD_Trial[N]_DelayLabel`: Human-readable delay label (e.g., "3 weeks")
+    - `DD_Trial[N]_ChoseDelayed`: 1 if delayed option chosen, 0 if immediate chosen
+  - **Summary fields**:
+    - `DD_FinalDelayIndex`: Final delay index (indifference point)
+    - `DD_FinalDelayLabel`: Final delay label
+    - `DD_CompletionTime`: Total task completion time in seconds
+    - `DD_RawData`: JSON string containing all trial data
+    - `DD_Completed`: Completion status ("Yes")
+    - `DD_StartTime`: ISO timestamp of task start
+    - `DD_EndTime`: ISO timestamp of task completion
+
+### Qualtrics Integration
+- Data is automatically saved to Qualtrics embedded data fields via postMessage
+- Uses the same field names and structure as the standalone CSV export
+- This ensures data from both sources can be easily combined or compared
 
 ## Notes
 - Buttons carry both `button` and `jspsych-btn` classes to ensure CSS overrides jsPsych defaults
